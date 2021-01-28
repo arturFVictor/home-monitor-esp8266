@@ -58,8 +58,7 @@ std::string Componente::getDescricao(){
 }
 
 class ComponenteLED: public Componente {
-  public:
-    ComponenteLED(std::string nome, std::string descricao, int pino);
+  public:   
     void setEstado(bool estadoLED);
     bool getEstado();
 
@@ -67,12 +66,6 @@ class ComponenteLED: public Componente {
     bool _estadoLED = false;
 };
 
-ComponenteLED::ComponenteLED(std::string nome, std::string descricao, int pino)
-{
-    setNome(nome);
-    setDescricao(descricao);
-    setPino(pino);
-}
 void ComponenteLED::setEstado(bool estadoLED){
   _estadoLED = estadoLED;
 }
