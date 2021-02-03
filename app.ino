@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <ESP8266WiFi.h>
 
 //template < class Type, class Alloc = allocator<T> > class list;
 
@@ -92,6 +93,23 @@ float ComponenteSensorTemperatura::getTemperatura(){
 }
 
 void setup(){
+  WiFi.enableInsecureWEP(true);
+  Serial.begin(9600);
+
+  WiFi.begin("", "");
+  
+  delay(5000);
+  
+  Serial.println("Conectando");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.println(WiFi.status());
+    delay(2000);
+  }
+
+  Serial.println("Endereço IP: ");
+  Serial.println(WiFi.localIP());
+
   std::list<Componente> componentes = {};
 
   pinMode(LED_BUILTIN, OUTPUT);
