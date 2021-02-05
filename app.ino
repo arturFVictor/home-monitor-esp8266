@@ -4,11 +4,14 @@
 #include <string>
 #include <list>
 #include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
 
 //template < class Type, class Alloc = allocator<T> > class list;
 
 using std::string;
 using std::list; 
+
+ESP8266WebServer server(80);
 
 class Componente{
   public:
@@ -93,10 +96,14 @@ float ComponenteSensorTemperatura::getTemperatura(){
 }
 
 void setup(){
-  WiFi.enableInsecureWEP(true);
   Serial.begin(9600);
 
-  WiFi.begin("", "");
+  WiFi.enableInsecureWEP(true);
+
+  char* ssid = "";
+  char* pw = "";
+  
+  WiFi.begin(ssid, pw);
   
   delay(5000);
   
@@ -109,19 +116,27 @@ void setup(){
 
   Serial.println("Endereço IP: ");
   Serial.println(WiFi.localIP());
+  
+  server.begin();
 
   std::list<Componente> componentes = {};
 
-  pinMode(LED_BUILTIN, OUTPUT);
+  server.on("/", HTTP_GET, handleRoot);
+  server.onNotFound(handleNotFound);
 }
 
 void loop(){
-  digitalWrite(LED_BUILTIN, LOW);
-
-  delay(1000);
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(2000);
+  server.handleClient();
 }
+
+void handleRoot() {
+  server.send(200, "text/plain", "servidor ta vivo");
+}
+
+void handleNotFound(){
+  server.send(404, "text/html", "404: <a href='https://www.youtube.com/watch?v=2ZIpFytCSVc&ab_channel=JameBenedict'>bruh</a>"); 
+}
+
 
 /*
 Rotas
